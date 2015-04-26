@@ -4,6 +4,14 @@
   *     endYear: 结束年份，默认2100
   *     container：日历容器ID
   *     type：日历类型，1：下拉列表。2.界面式。默认：1
+  *
+  * 接口：
+  *     getDate(): 获取当前选中的日期，返回的数据类型：
+  *                 {
+  *                     year: 2015,
+  *                     month: 1,
+  *                     day: 1
+  *                 }
   */
 var BeDate = function() {
     var datas = {
@@ -21,6 +29,7 @@ var BeDate = function() {
         setYears: function() {
             datas.yearContainer = document.createElement('SELECT');
             datas.yearContainer.setAttribute('name', 'year')
+            datas.yearContainer.setAttribute('id', 'bedate-year')
             var str = '';
             for (var y=datas.startYear; y<=datas.endYear; y++) {
                 str += '<option';
@@ -48,6 +57,7 @@ var BeDate = function() {
                 var month = 1;
                 datas.monthContainer = document.createElement('SELECT');
                 datas.monthContainer.setAttribute('name', 'month')
+                datas.monthContainer.setAttribute('id', 'bedate-month')
                 var str = '';
                 for (var m=1; m<=12; m++) {
                     str += '<option';
@@ -81,7 +91,8 @@ var BeDate = function() {
                 datas.dayContainer.innerHTML = str;
             } else {
                 datas.dayContainer = document.createElement('SELECT');
-                datas.dayContainer.setAttribute('name', 'month')
+                datas.dayContainer.setAttribute('name', 'day')
+                datas.dayContainer.setAttribute('id', 'bedate-day')
                 datas.dayContainer.innerHTML = str;
                 datas.container.appendChild(datas.dayContainer);
             }
@@ -107,6 +118,16 @@ var BeDate = function() {
             }
             return days
         }
+    }, _getDate = function() {
+        /* 获取当前的日期 */
+        var year = parseInt(document.getElementById('bedate-year').value);
+        var month = parseInt(document.getElementById('bedate-month').value);
+        var day = parseInt(document.getElementById('bedate-day').value);
+        return {
+            year: year,
+            month: month,
+            day: day
+        }
     }, _init = function(params) {
         if (params) {
             /* 初始化用户事件、属性 start */
@@ -124,6 +145,7 @@ var BeDate = function() {
         _fn.setYears();
     };
     return {
+        getDate: _getDate,
         init: _init
     };
 }();
